@@ -1,0 +1,682 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>THIQA360 | Trust Infrastructure for Real-Asset Economies</title>
+  <meta name="description" content="THIQA360 structures evidence-led verification, governed confidence assessment, and conditional release-readiness for institutional real-asset workflows.">
+  <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Crect width='100' height='100' rx='20' fill='%230F1419'/%3E%3Cpath d='M28 52 L44 68 L74 34' stroke='%23D4AF37' stroke-width='10' fill='none' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --brand: #D4AF37;
+      --brand-light: #E8CB6B;
+      --bg: #0F1419;
+      --bg-2: #131d2a;
+      --text: #f4f8ff;
+      --muted: #9eb3d1;
+      --success: #68d391;
+      --line: rgba(255,255,255,0.08);
+      --glow: rgba(212,175,55,0.35);
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--text);
+      background: var(--bg);
+      line-height: 1.65;
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+    .container { width: min(calc(100% - 48px), 1240px); margin: 0 auto; }
+
+    /* ---------- AMBIENT BACKGROUND ---------- */
+    .bg-orbs { position: fixed; inset: 0; z-index: -1; overflow: hidden; background: linear-gradient(180deg, #0F1419 0%, #131d2a 50%, #0F1419 100%); }
+    .orb { position: absolute; border-radius: 50%; filter: blur(120px); opacity: 0.5; animation: float 14s ease-in-out infinite; }
+    .orb-1 { width: 560px; height: 560px; background: radial-gradient(circle, rgba(212,175,55,0.22), transparent 65%); top: -180px; right: -120px; }
+    .orb-2 { width: 480px; height: 480px; background: radial-gradient(circle, rgba(37,99,235,0.14), transparent 65%); top: 40%; left: -200px; animation-delay: -6s; }
+    .orb-3 { width: 420px; height: 420px; background: radial-gradient(circle, rgba(212,175,55,0.12), transparent 65%); bottom: -140px; right: 20%; animation-delay: -10s; }
+    @keyframes float { 0%,100% { transform: translateY(0) scale(1); } 50% { transform: translateY(-36px) scale(1.05); } }
+
+    /* ---------- HEADER ---------- */
+    header {
+      position: sticky; top: 0; z-index: 100;
+      background: rgba(15,20,25,0.72);
+      backdrop-filter: blur(18px); -webkit-backdrop-filter: blur(18px);
+      border-bottom: 1px solid var(--line);
+      padding: 14px 0;
+    }
+    .nav { display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+    .brand { display: flex; align-items: center; gap: 11px; font-weight: 800; font-size: 19px; letter-spacing: 0.02em; color: var(--text); cursor: pointer; text-decoration: none; }
+    .brand-mark { width: 34px; height: 34px; border-radius: 9px; background: linear-gradient(135deg, rgba(212,175,55,0.18), rgba(212,175,55,0.05)); border: 1px solid rgba(212,175,55,0.5); display: grid; place-items: center; box-shadow: 0 0 18px rgba(212,175,55,0.25); }
+    .brand-mark svg { width: 18px; height: 18px; }
+    .brand span { color: var(--brand); }
+    .nav-links { display: flex; gap: 30px; }
+    .nav-links a { color: #c8d7ef; text-decoration: none; font-size: 14.5px; font-weight: 500; position: relative; transition: color 250ms; }
+    .nav-links a::after { content: ""; position: absolute; left: 0; bottom: -6px; width: 0; height: 2px; background: var(--brand); border-radius: 2px; transition: width 280ms ease; }
+    .nav-links a:hover { color: var(--brand); }
+    .nav-links a:hover::after { width: 100%; }
+
+    /* ---------- BUTTONS ---------- */
+    .button {
+      display: inline-flex; align-items: center; gap: 8px;
+      background: linear-gradient(135deg, var(--brand-light), var(--brand));
+      color: #0F1419; border: none; padding: 13px 24px; border-radius: 10px;
+      font-weight: 700; font-size: 15px; font-family: inherit; cursor: pointer;
+      transition: transform 250ms ease, box-shadow 250ms ease;
+      box-shadow: 0 4px 20px rgba(212,175,55,0.25);
+    }
+    .button:hover { transform: translateY(-2px); box-shadow: 0 10px 34px rgba(212,175,55,0.45); }
+    .button:active { transform: translateY(0); }
+    .button .arrow { transition: transform 250ms; }
+    .button:hover .arrow { transform: translateX(4px); }
+    .button-secondary { background: transparent; border: 1.5px solid rgba(212,175,55,0.65); color: var(--brand); box-shadow: none; }
+    .button-secondary:hover { background: rgba(212,175,55,0.1); box-shadow: 0 0 24px rgba(212,175,55,0.2); }
+
+    section { padding: 96px 0; position: relative; }
+    section + section { border-top: 1px solid var(--line); }
+    h1 { font-size: clamp(46px, 7vw, 88px); line-height: 1.0; font-weight: 900; letter-spacing: -0.03em; }
+    h2 { font-size: clamp(32px, 4.6vw, 56px); font-weight: 800; letter-spacing: -0.02em; margin-bottom: 18px; }
+    h3 { font-size: 23px; font-weight: 700; margin-bottom: 14px; }
+    p { color: var(--muted); }
+    .grad-text { background: linear-gradient(120deg, var(--brand-light) 10%, var(--brand) 55%, #b3902a 90%); -webkit-background-clip: text; background-clip: text; -webkit-text-fill-color: transparent; }
+
+    .eyebrow {
+      display: inline-flex; align-items: center; gap: 10px;
+      border: 1px solid rgba(212,175,55,0.55);
+      background: rgba(212,175,55,0.08); color: var(--brand);
+      padding: 9px 16px; border-radius: 999px;
+      font-size: 11.5px; letter-spacing: 0.16em; text-transform: uppercase; font-weight: 700;
+      margin-bottom: 24px;
+    }
+    .eyebrow::before { content: ""; width: 7px; height: 7px; border-radius: 50%; background: var(--brand); box-shadow: 0 0 12px var(--brand); animation: pulse 2.4s ease-in-out infinite; }
+    @keyframes pulse { 0%,100% { opacity: 1; transform: scale(1);} 50% { opacity: 0.55; transform: scale(0.8);} }
+
+    /* ---------- HERO ---------- */
+    .hero { padding: 110px 0 80px; }
+    .hero-inner { max-width: 900px; }
+    .hero .stagger { opacity: 0; transform: translateY(28px); animation: rise 800ms cubic-bezier(0.22,1,0.36,1) forwards; }
+    .hero .d1 { animation-delay: 80ms; } .hero .d2 { animation-delay: 220ms; } .hero .d3 { animation-delay: 380ms; } .hero .d4 { animation-delay: 540ms; } .hero .d5 { animation-delay: 720ms; }
+    @keyframes rise { to { opacity: 1; transform: translateY(0); } }
+    .hero-sub { font-size: 19px; margin-top: 26px; max-width: 720px; line-height: 1.75; }
+    .hero-ctas { margin-top: 34px; display: flex; gap: 14px; flex-wrap: wrap; }
+
+    /* stats strip */
+    .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 18px; margin-top: 64px; }
+    .stat { padding: 26px 22px; border: 1px solid var(--line); border-radius: 16px; background: rgba(255,255,255,0.025); backdrop-filter: blur(8px); transition: border-color 300ms, transform 300ms; }
+    .stat:hover { border-color: rgba(212,175,55,0.5); transform: translateY(-3px); }
+    .stat-num { font-size: 38px; font-weight: 900; color: var(--brand); letter-spacing: -0.02em; line-height: 1; }
+    .stat-num small { font-size: 22px; }
+    .stat-label { font-size: 13px; color: var(--muted); margin-top: 8px; line-height: 1.45; }
+
+    /* trust bar */
+    .trustbar { margin-top: 54px; display: flex; align-items: center; gap: 14px 30px; flex-wrap: wrap; }
+    .trustbar-label { font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: #74879f; font-weight: 700; }
+    .badge { display: inline-flex; align-items: center; gap: 8px; font-size: 13px; font-weight: 600; color: #cfdcf0; border: 1px solid var(--line); background: rgba(255,255,255,0.03); padding: 9px 16px; border-radius: 999px; transition: border-color 280ms, box-shadow 280ms; }
+    .badge:hover { border-color: rgba(212,175,55,0.5); box-shadow: 0 0 18px rgba(212,175,55,0.15); }
+    .badge b { color: var(--brand); font-weight: 700; }
+
+    /* ---------- SCROLL REVEAL ---------- */
+    .reveal { opacity: 0; transform: translateY(30px); transition: opacity 750ms cubic-bezier(0.22,1,0.36,1), transform 750ms cubic-bezier(0.22,1,0.36,1); }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+    .reveal-delay-1 { transition-delay: 100ms; } .reveal-delay-2 { transition-delay: 200ms; } .reveal-delay-3 { transition-delay: 300ms; }
+
+    /* ---------- GOVERNANCE ---------- */
+    .governance-panel {
+      padding: 52px; border: 1px solid rgba(212,175,55,0.55);
+      background: linear-gradient(160deg, rgba(212,175,55,0.08), rgba(212,175,55,0.02));
+      border-radius: 26px; margin-top: 36px; position: relative; overflow: hidden;
+    }
+    .governance-panel::before { content: ""; position: absolute; top: -60%; left: -20%; width: 60%; height: 200%; background: radial-gradient(circle, rgba(212,175,55,0.1), transparent 70%); pointer-events: none; }
+    .governance-title { font-size: 26px; font-weight: 800; margin-bottom: 28px; color: var(--brand); }
+    .governance-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 52px; }
+    .governance-column h4 { font-size: 15px; font-weight: 800; margin-bottom: 18px; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text); }
+    .governance-column ul { list-style: none; }
+    .governance-column li { padding: 12px 0; color: var(--muted); font-size: 14.5px; border-bottom: 1px solid rgba(212,175,55,0.12); display: flex; gap: 12px; align-items: flex-start; }
+    .governance-column li:last-child { border-bottom: none; }
+    .li-does::before { content: "✓"; color: var(--brand); font-weight: 800; flex-shrink: 0; }
+    .li-not::before { content: "✕"; color: #e07a7a; font-weight: 800; flex-shrink: 0; }
+
+    /* ---------- JOURNEY ---------- */
+    .journey-progress { display: flex; justify-content: space-between; align-items: flex-start; margin: 52px 0 40px; flex-wrap: wrap; gap: 14px; position: relative; }
+    .journey-step { display: flex; flex-direction: column; align-items: center; gap: 10px; cursor: pointer; opacity: 0.4; transition: opacity 300ms; flex: 1; min-width: 90px; }
+    .journey-step.active { opacity: 1; }
+    .journey-dot {
+      width: 54px; height: 54px; border-radius: 50%;
+      background: rgba(212,175,55,0.08); border: 2px solid rgba(212,175,55,0.35);
+      display: grid; place-items: center; color: var(--brand); font-weight: 800; font-size: 17px;
+      transition: all 320ms cubic-bezier(0.22,1,0.36,1);
+    }
+    .journey-step:hover .journey-dot { border-color: var(--brand); transform: scale(1.06); }
+    .journey-step.active .journey-dot { background: linear-gradient(135deg, var(--brand-light), var(--brand)); color: #0F1419; border-color: var(--brand); box-shadow: 0 0 26px var(--glow); }
+    .journey-label { font-size: 12.5px; text-align: center; color: var(--muted); font-weight: 600; }
+    .journey-content { background: rgba(255,255,255,0.025); border: 1px solid var(--line); border-radius: 20px; padding: 50px; min-height: 280px; }
+    .journey-panel { display: none; }
+    .journey-panel.active { display: block; animation: panelIn 400ms cubic-bezier(0.22,1,0.36,1); }
+    @keyframes panelIn { from { opacity: 0; transform: translateY(14px); } to { opacity: 1; transform: translateY(0); } }
+    .journey-metric { background: rgba(212,175,55,0.08); border: 1px solid rgba(212,175,55,0.5); border-radius: 14px; padding: 18px 22px; display: inline-block; margin-top: 26px; min-width: 240px; }
+    .metric-label { font-size: 11px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); font-weight: 700; }
+    .metric-value { font-size: 26px; font-weight: 800; color: var(--brand); margin-top: 6px; }
+    .meter { height: 7px; border-radius: 99px; background: rgba(255,255,255,0.08); margin-top: 12px; overflow: hidden; }
+    .meter-fill { height: 100%; width: 0; border-radius: 99px; background: linear-gradient(90deg, var(--brand-light), var(--brand)); box-shadow: 0 0 12px var(--glow); transition: width 900ms cubic-bezier(0.22,1,0.36,1); }
+
+    /* ---------- DIAGNOSTIC ---------- */
+    .diagnostic-container { display: grid; grid-template-columns: 1fr 1fr; gap: 44px; margin-top: 48px; }
+    .diagnostic-form, .diagnostic-result { background: rgba(255,255,255,0.025); border: 1px solid var(--line); border-radius: 20px; padding: 38px; }
+    .diagnostic-result { display: none; }
+    .diagnostic-question { margin-bottom: 30px; padding-bottom: 30px; border-bottom: 1px solid rgba(212,175,55,0.12); }
+    .diagnostic-question:last-of-type { border-bottom: none; }
+    .q-num { font-size: 11px; text-transform: uppercase; letter-spacing: 0.14em; color: var(--brand); margin-bottom: 10px; font-weight: 800; }
+    .diagnostic-question h4 { font-size: 16.5px; font-weight: 700; margin-bottom: 8px; }
+    .diagnostic-question p { font-size: 13.5px; margin-bottom: 14px; }
+    .q-options { display: flex; flex-direction: column; gap: 10px; }
+    .q-options label { display: flex; align-items: flex-start; gap: 11px; cursor: pointer; font-size: 13.5px; color: var(--muted); padding: 10px 14px; border: 1px solid transparent; border-radius: 10px; transition: all 220ms; }
+    .q-options label:hover { background: rgba(212,175,55,0.06); border-color: rgba(212,175,55,0.3); color: var(--text); }
+    .q-options input { margin-top: 3px; cursor: pointer; accent-color: var(--brand); }
+    .result-level { text-align: center; padding: 34px; background: rgba(212,175,55,0.08); border-radius: 16px; border: 1px solid rgba(212,175,55,0.55); margin-bottom: 22px; }
+    .result-label { font-size: 12px; text-transform: uppercase; letter-spacing: 0.12em; color: var(--muted); margin-bottom: 10px; font-weight: 700; }
+    .result-score { font-size: 42px; font-weight: 900; color: var(--brand); letter-spacing: -0.02em; }
+    .result-description { font-size: 14.5px; color: var(--muted); line-height: 1.7; margin-bottom: 22px; }
+
+    /* ---------- SCENARIOS ---------- */
+    .scenarios-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(330px, 1fr)); gap: 22px; margin-top: 48px; }
+    .scenario-card { border: 1px solid var(--line); background: rgba(255,255,255,0.025); border-radius: 20px; padding: 32px; transition: all 320ms cubic-bezier(0.22,1,0.36,1); }
+    .scenario-card:hover { border-color: rgba(212,175,55,0.55); transform: translateY(-5px); box-shadow: 0 18px 44px rgba(0,0,0,0.35), 0 0 30px rgba(212,175,55,0.08); }
+    .scenario-label { display: inline-block; font-size: 10.5px; text-transform: uppercase; letter-spacing: 0.14em; color: var(--brand); margin-bottom: 12px; font-weight: 800; }
+    .scenario-card p { font-size: 13.5px; margin-bottom: 22px; }
+    .scenario-flow { border-left: 2px solid var(--brand); padding-left: 18px; }
+    .flow-step { padding: 11px 0; font-size: 13px; border-bottom: 1px solid rgba(212,175,55,0.12); }
+    .flow-step:last-child { border-bottom: none; }
+    .flow-step strong { color: var(--brand); display: block; margin-bottom: 3px; font-size: 12.5px; }
+    .flow-step span { color: var(--muted); }
+
+    /* ---------- MODULES ---------- */
+    .router-buttons { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 12px; margin: 40px 0 44px; }
+    .router-btn { padding: 15px 16px; border: 1px solid var(--line); background: rgba(255,255,255,0.03); color: var(--text); border-radius: 12px; cursor: pointer; font-size: 14px; font-weight: 700; font-family: inherit; transition: all 260ms; }
+    .router-btn:hover { border-color: var(--brand); background: rgba(212,175,55,0.08); color: var(--brand); }
+    .router-btn.active { border-color: var(--brand); background: linear-gradient(135deg, var(--brand-light), var(--brand)); color: #0F1419; box-shadow: 0 0 22px rgba(212,175,55,0.3); }
+    .module-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 22px; }
+    .module-card { padding: 36px 30px; border: 1px solid var(--line); background: rgba(255,255,255,0.025); border-radius: 20px; transition: all 320ms cubic-bezier(0.22,1,0.36,1); position: relative; overflow: hidden; }
+    .module-card::after { content: ""; position: absolute; inset: 0; background: radial-gradient(420px circle at var(--mx,50%) var(--my,50%), rgba(212,175,55,0.1), transparent 45%); opacity: 0; transition: opacity 300ms; pointer-events: none; }
+    .module-card:hover { border-color: rgba(212,175,55,0.55); transform: translateY(-5px); }
+    .module-card:hover::after { opacity: 1; }
+    .module-icon { width: 46px; height: 46px; border-radius: 12px; background: rgba(212,175,55,0.12); border: 1px solid rgba(212,175,55,0.45); display: grid; place-items: center; margin-bottom: 18px; color: var(--brand); font-weight: 900; font-size: 16px; }
+    .module-card h4 { font-size: 19px; font-weight: 800; margin-bottom: 10px; color: var(--brand); }
+    .module-card p { font-size: 14px; }
+
+    /* ---------- CONTACT ---------- */
+    .contact-wrap { max-width: 640px; margin-top: 44px; }
+    .form-field { margin-bottom: 15px; }
+    .form-field input, .form-field textarea, .form-field select {
+      width: 100%; padding: 14px 16px; border: 1px solid var(--line);
+      background: rgba(255,255,255,0.04); border-radius: 12px; color: var(--text);
+      font-family: inherit; font-size: 14.5px; transition: all 250ms;
+    }
+    .form-field input:focus, .form-field textarea:focus, .form-field select:focus { outline: none; border-color: var(--brand); background: rgba(212,175,55,0.07); box-shadow: 0 0 0 4px rgba(212,175,55,0.1); }
+    .form-field ::placeholder { color: #7e96bb; }
+    .form-field label { display: flex; align-items: flex-start; gap: 9px; font-size: 12.5px; color: var(--muted); margin-top: 12px; cursor: pointer; }
+    .form-field label input { width: auto; margin-top: 2px; accent-color: var(--brand); }
+    .success-message { background: rgba(104,211,145,0.1); border: 1px solid var(--success); color: var(--success); padding: 16px 18px; border-radius: 12px; margin-bottom: 16px; font-size: 14px; font-weight: 600; display: none; }
+    .success-message.show { display: block; animation: panelIn 380ms ease; }
+
+    footer { border-top: 1px solid var(--line); padding: 56px 0 44px; text-align: center; }
+    footer .brand { justify-content: center; margin-bottom: 12px; }
+    footer p { font-size: 14px; }
+    .disclaimer { font-size: 12px; color: #74879f; max-width: 640px; margin: 20px auto 0; line-height: 1.7; }
+
+    @media (max-width: 900px) {
+      .stats { grid-template-columns: repeat(2, 1fr); }
+      .diagnostic-container { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 768px) {
+      .nav-links { display: none; }
+      .governance-grid { grid-template-columns: 1fr; gap: 30px; }
+      .governance-panel { padding: 34px 26px; }
+      .journey-content { padding: 32px 24px; }
+      section { padding: 72px 0; }
+    }
+  </style>
+</head>
+<body>
+  <div class="bg-orbs"><div class="orb orb-1"></div><div class="orb orb-2"></div><div class="orb orb-3"></div></div>
+
+  <header>
+    <div class="container">
+      <div class="nav">
+        <a class="brand" href="#top">
+          <span class="brand-mark">
+            <svg viewBox="0 0 100 100" fill="none"><path d="M25 52 L44 71 L76 32" stroke="#D4AF37" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/></svg>
+          </span>
+          THIQA<span>360</span>
+        </a>
+        <nav class="nav-links">
+          <a href="#governance">Governance</a>
+          <a href="#journey">Trust Journey</a>
+          <a href="#diagnostic">Diagnostic</a>
+          <a href="#platform">Platform</a>
+          <a href="#contact">Contact</a>
+        </nav>
+        <button class="button" onclick="document.getElementById('contact').scrollIntoView()">Access Request <span class="arrow">→</span></button>
+      </div>
+    </div>
+  </header>
+
+  <main id="top">
+    <!-- HERO -->
+    <section class="hero">
+      <div class="container hero-inner">
+        <span class="eyebrow stagger d1">Digital Trust Infrastructure</span>
+        <h1 class="stagger d2">Trust Infrastructure for <span class="grad-text">Real-Asset Economies</span></h1>
+        <p class="hero-sub stagger d3">
+          THIQA360 structures evidence-led verification, governed confidence assessment, and conditional release-readiness for institutional real-asset workflows. Non-custodial. Authorised human sign-off required. Pre-MVP prototype.
+        </p>
+        <div class="hero-ctas stagger d4">
+          <button class="button" onclick="document.getElementById('platform').scrollIntoView()">Explore the Platform <span class="arrow">→</span></button>
+          <button class="button button-secondary" onclick="document.getElementById('contact').scrollIntoView()">Request Institutional Access</button>
+        </div>
+
+        <div class="stats stagger d5">
+          <div class="stat"><div class="stat-num" data-count="4">0</div><div class="stat-label">Integrated verification &amp; governance modules</div></div>
+          <div class="stat"><div class="stat-num" data-count="5">0</div><div class="stat-label">Stages in the structured Trust Journey</div></div>
+          <div class="stat"><div class="stat-num" data-count="100" data-suffix="%">0</div><div class="stat-label">Decisions requiring authorised human sign-off</div></div>
+          <div class="stat"><div class="stat-num" data-count="0">0</div><div class="stat-label">Funds held, moved, or custodied — ever</div></div>
+        </div>
+
+        <div class="trustbar stagger d5">
+          <span class="trustbar-label">Ecosystem</span>
+          <span class="badge"><b>Hub71</b> Initiate Programme</span>
+          <span class="badge"><b>Takamul</b> Funding Approved</span>
+          <span class="badge">Patent Application <b>Under Examination</b></span>
+          <span class="badge">Designed for <b>ADGM</b> Alignment</span>
+        </div>
+      </div>
+    </section>
+
+    <!-- GOVERNANCE -->
+    <section id="governance">
+      <div class="container">
+        <span class="eyebrow reveal">Governance &amp; Operations</span>
+        <h2 class="reveal">What THIQA360 Does — <span class="grad-text">and Does Not Do</span></h2>
+        <div class="governance-panel reveal reveal-delay-1">
+          <h3 class="governance-title">Operational Boundaries</h3>
+          <div class="governance-grid">
+            <div class="governance-column">
+              <h4>THIQA360 Does</h4>
+              <ul>
+                <li class="li-does">Structures evidence-led verification workflows</li>
+                <li class="li-does">Supports governed confidence assessment processes</li>
+                <li class="li-does">Evaluates defined conditions and requirements</li>
+                <li class="li-does">Produces recommendations for authorised human review</li>
+                <li class="li-does">Maintains an append-only, tamper-evident evidence log</li>
+              </ul>
+            </div>
+            <div class="governance-column">
+              <h4>THIQA360 Does Not</h4>
+              <ul>
+                <li class="li-not">Hold funds, financial assets, or collateral</li>
+                <li class="li-not">Execute payments, transfers, or financial transactions</li>
+                <li class="li-not">Release assets or value without authorised human sign-off</li>
+                <li class="li-not">Provide regulatory approval, licensing, or endorsement</li>
+                <li class="li-not">Replace authorised professional judgment or decision-makers</li>
+              </ul>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- TRUST JOURNEY -->
+    <section id="journey">
+      <div class="container">
+        <span class="eyebrow reveal">Interactive Explorer</span>
+        <h2 class="reveal">The <span class="grad-text">Trust Journey</span></h2>
+        <p class="reveal reveal-delay-1" style="max-width:680px;">Walk through how THIQA360 structures evidence-led verification — from party identification through audit-ready evidence recording.</p>
+
+        <div class="journey-progress reveal reveal-delay-2">
+          <div class="journey-step active" data-step="1" onclick="showJourneyStep(1)"><div class="journey-dot">1</div><div class="journey-label">Party ID</div></div>
+          <div class="journey-step" data-step="2" onclick="showJourneyStep(2)"><div class="journey-dot">2</div><div class="journey-label">Asset Evidence</div></div>
+          <div class="journey-step" data-step="3" onclick="showJourneyStep(3)"><div class="journey-dot">3</div><div class="journey-label">Conditions</div></div>
+          <div class="journey-step" data-step="4" onclick="showJourneyStep(4)"><div class="journey-dot">4</div><div class="journey-label">Human Review</div></div>
+          <div class="journey-step" data-step="5" onclick="showJourneyStep(5)"><div class="journey-dot">5</div><div class="journey-label">Audit Record</div></div>
+        </div>
+
+        <div class="journey-content reveal reveal-delay-3">
+          <div class="journey-panel active" data-step="1">
+            <h3>Party Identification (DVI)</h3>
+            <p>THIQA360 evaluates party and entity verification confidence. Is the counterparty correctly identified? Are institutional roles clearly documented? DVI produces a structured confidence assessment.</p>
+            <div class="journey-metric"><div class="metric-label">Illustrative Confidence</div><div class="metric-value">87%</div><div class="meter"><div class="meter-fill" data-width="87%"></div></div></div>
+          </div>
+          <div class="journey-panel" data-step="2">
+            <h3>Asset Evidence (AVI)</h3>
+            <p>THIQA360 structures asset and title evidence verification. Is the asset documented? Is ownership clear? Are title records complete and consistent?</p>
+            <div class="journey-metric"><div class="metric-label">Illustrative Evidence Completeness</div><div class="metric-value">92%</div><div class="meter"><div class="meter-fill" data-width="92%"></div></div></div>
+          </div>
+          <div class="journey-panel" data-step="3">
+            <h3>Condition Verification</h3>
+            <p>THIQA360 evaluates whether defined release conditions appear satisfied. Payment milestones met? Inspections completed? Regulatory clearances received?</p>
+            <div class="journey-metric"><div class="metric-label">Illustrative Conditions Satisfied</div><div class="metric-value">4 of 5</div><div class="meter"><div class="meter-fill" data-width="80%"></div></div></div>
+          </div>
+          <div class="journey-panel" data-step="4">
+            <h3>Human Review &amp; Sign-Off</h3>
+            <p>THIQA360 produces a recommendation for authorised human review. A qualified decision-maker reviews the evidence and decides whether to proceed — based on their professional judgment and institutional authority.</p>
+            <div class="journey-metric"><div class="metric-label">ASSURA Recommendation</div><div class="metric-value">Ready for Review</div><div class="meter"><div class="meter-fill" data-width="100%"></div></div></div>
+          </div>
+          <div class="journey-panel" data-step="5">
+            <h3>Audit-Ready Record</h3>
+            <p>THIQA360 maintains an append-only, tamper-evident evidence log recording every step: which evidence was evaluated, when, by whom, what confidence levels were produced, and what recommendation was made.</p>
+            <div class="journey-metric"><div class="metric-label">Illustrative Evidence Records</div><div class="metric-value">47 items</div><div class="meter"><div class="meter-fill" data-width="100%"></div></div></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- DIAGNOSTIC -->
+    <section id="diagnostic">
+      <div class="container">
+        <span class="eyebrow reveal">Self-Assessment</span>
+        <h2 class="reveal">Trust Readiness <span class="grad-text">Diagnostic</span></h2>
+        <p class="reveal reveal-delay-1" style="max-width:680px;">Answer five questions about your transaction workflow. Get an indicative assessment of your governance maturity.</p>
+
+        <div class="diagnostic-container reveal reveal-delay-2">
+          <div class="diagnostic-form">
+            <form onsubmit="submitDiagnostic(event)">
+              <div class="diagnostic-question">
+                <div class="q-num">1 / 5</div>
+                <h4>Are your evidence requirements clearly defined?</h4>
+                <p>E.g., what documents, certifications, or approvals must be in place before release?</p>
+                <div class="q-options">
+                  <label><input type="radio" name="q1" value="2"> <span>Yes, fully documented and institutionalised</span></label>
+                  <label><input type="radio" name="q1" value="1"> <span>Partially defined; some ambiguity remains</span></label>
+                  <label><input type="radio" name="q1" value="0"> <span>Not clearly defined; ad-hoc process</span></label>
+                </div>
+              </div>
+              <div class="diagnostic-question">
+                <div class="q-num">2 / 5</div>
+                <h4>Are parties and authorised signatories consistently verified?</h4>
+                <p>Do you have documented identity verification and role confirmation for all decision-makers?</p>
+                <div class="q-options">
+                  <label><input type="radio" name="q2" value="2"> <span>Yes, fully documented with an audit trail</span></label>
+                  <label><input type="radio" name="q2" value="1"> <span>Mostly verified; some gaps in documentation</span></label>
+                  <label><input type="radio" name="q2" value="0"> <span>Inconsistent or undocumented verification</span></label>
+                </div>
+              </div>
+              <div class="diagnostic-question">
+                <div class="q-num">3 / 5</div>
+                <h4>Is asset evidence held across fragmented sources?</h4>
+                <p>Title deeds, inspection reports, valuations, approvals — scattered across email, drives, and third parties?</p>
+                <div class="q-options">
+                  <label><input type="radio" name="q3" value="2"> <span>Centralised in a single accessible system</span></label>
+                  <label><input type="radio" name="q3" value="1"> <span>Mostly centralised; some sources external</span></label>
+                  <label><input type="radio" name="q3" value="0"> <span>Highly fragmented across many sources</span></label>
+                </div>
+              </div>
+              <div class="diagnostic-question">
+                <div class="q-num">4 / 5</div>
+                <h4>Are release conditions documented in a structured way?</h4>
+                <p>E.g., "Funds only released when payment received AND inspection passed AND all signatories confirm."</p>
+                <div class="q-options">
+                  <label><input type="radio" name="q4" value="2"> <span>Yes, conditions formally defined and versioned</span></label>
+                  <label><input type="radio" name="q4" value="1"> <span>Partially documented; some understood verbally</span></label>
+                  <label><input type="radio" name="q4" value="0"> <span>Unclear or ad-hoc; conditions change mid-execution</span></label>
+                </div>
+              </div>
+              <div class="diagnostic-question">
+                <div class="q-num">5 / 5</div>
+                <h4>Can the decision path be reconstructed later?</h4>
+                <p>If questioned by auditors or regulators six months from now, can you show exactly what was reviewed, approved, and why?</p>
+                <div class="q-options">
+                  <label><input type="radio" name="q5" value="2"> <span>Yes, complete audit trail maintained</span></label>
+                  <label><input type="radio" name="q5" value="1"> <span>Mostly; records exist but are not fully integrated</span></label>
+                  <label><input type="radio" name="q5" value="0"> <span>No; the decision trail is scattered or incomplete</span></label>
+                </div>
+              </div>
+              <button type="submit" class="button" style="width:100%; justify-content:center; margin-top:12px;">See Your Assessment <span class="arrow">→</span></button>
+            </form>
+          </div>
+
+          <div class="diagnostic-result" id="diagnosticResult">
+            <div class="result-level">
+              <div class="result-label">Your Governance Maturity</div>
+              <div class="result-score" id="resultScore">—</div>
+            </div>
+            <div class="result-description" id="resultDescription"></div>
+            <p style="font-size:12px; margin-bottom:16px;">This assessment is indicative and does not constitute legal, regulatory, compliance, or technical advice.</p>
+            <button class="button button-secondary" style="width:100%; justify-content:center;" onclick="resetDiagnostic()">Take Again</button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SCENARIOS -->
+    <section id="scenarios">
+      <div class="container">
+        <span class="eyebrow reveal">Illustrative Examples</span>
+        <h2 class="reveal">The Trust Journey <span class="grad-text">in Action</span></h2>
+        <p class="reveal reveal-delay-1" style="max-width:680px;">These are synthetic examples. They illustrate how THIQA360 may structure evidence and governance for institutional workflows.</p>
+
+        <div class="scenarios-grid">
+          <div class="scenario-card reveal reveal-delay-1">
+            <div class="scenario-label">Scenario A · Illustrative</div>
+            <h3>Development Milestone Release</h3>
+            <p>Funds release is considered when a construction phase reaches 50% completion, verified by an independent inspector.</p>
+            <div class="scenario-flow">
+              <div class="flow-step"><strong>DVI</strong><span>Developer identity + signatory authority confirmed</span></div>
+              <div class="flow-step"><strong>AVI</strong><span>Asset and title ownership documented</span></div>
+              <div class="flow-step"><strong>Conditions</strong><span>Inspector report received + milestone completion verified</span></div>
+              <div class="flow-step"><strong>ASSURA</strong><span>Recommendation: release-ready, subject to authorised sign-off</span></div>
+              <div class="flow-step"><strong>Sign-off</strong><span>Authorised reviewer approves release or raises an exception</span></div>
+            </div>
+          </div>
+          <div class="scenario-card reveal reveal-delay-2">
+            <div class="scenario-label">Scenario B · Illustrative</div>
+            <h3>Title Verification for Asset Transfer</h3>
+            <p>An institutional buyer requires evidence of clear title, no encumbrances, and regulatory clearance before proceeding.</p>
+            <div class="scenario-flow">
+              <div class="flow-step"><strong>DVI</strong><span>Seller identity + buyer authority confirmed via legal counsel</span></div>
+              <div class="flow-step"><strong>AVI</strong><span>Title deed + registry search + encumbrance check</span></div>
+              <div class="flow-step"><strong>Conditions</strong><span>Regulatory clearance received + no pending disputes</span></div>
+              <div class="flow-step"><strong>ASSURA</strong><span>Recommendation: evidence and conditions satisfy release criteria</span></div>
+              <div class="flow-step"><strong>Sign-off</strong><span>Legal team + financial institution jointly authorise</span></div>
+            </div>
+          </div>
+          <div class="scenario-card reveal reveal-delay-3">
+            <div class="scenario-label">Scenario C · Illustrative</div>
+            <h3>Multi-Signature Governance</h3>
+            <p>A syndicated lender requires sign-off from compliance, legal, and credit teams before any release decision.</p>
+            <div class="scenario-flow">
+              <div class="flow-step"><strong>DVI</strong><span>All counterparties verified + signatory authorities confirmed</span></div>
+              <div class="flow-step"><strong>AVI</strong><span>Documentation complete + valuation current + insurance in place</span></div>
+              <div class="flow-step"><strong>Conditions</strong><span>Compliance ✓ Legal ✓ Credit ✓ — evaluated independently</span></div>
+              <div class="flow-step"><strong>ASSURA</strong><span>Tracks each condition, shows pending sign-offs</span></div>
+              <div class="flow-step"><strong>Sign-off</strong><span>Compliance → Legal → Credit all authorise in sequence</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- PLATFORM -->
+    <section id="platform">
+      <div class="container">
+        <span class="eyebrow reveal">Platform Architecture</span>
+        <h2 class="reveal">The Trust <span class="grad-text">Foundation</span></h2>
+        <p class="reveal reveal-delay-1" style="max-width:680px;">Four integrated modules working together to structure evidence-led verification and governed release-readiness assessment.</p>
+
+        <div class="router-buttons reveal reveal-delay-2">
+          <button class="router-btn active" onclick="filterModules('all', this)">All Modules</button>
+          <button class="router-btn" onclick="filterModules('dvi', this)">DVI</button>
+          <button class="router-btn" onclick="filterModules('avi', this)">AVI</button>
+          <button class="router-btn" onclick="filterModules('assura', this)">ASSURA</button>
+          <button class="router-btn" onclick="filterModules('audit', this)">Audit Trail</button>
+        </div>
+
+        <div class="module-grid reveal reveal-delay-3" id="moduleGrid">
+          <div class="module-card" data-module="dvi">
+            <div class="module-icon">DV</div>
+            <h4>DVI</h4>
+            <p>Party and Entity Verification Confidence. Evaluates the confidence level of party identification and institutional entity verification.</p>
+          </div>
+          <div class="module-card" data-module="avi">
+            <div class="module-icon">AV</div>
+            <h4>AVI</h4>
+            <p>Asset and Title Evidence Confidence. Structures the verification of asset ownership, title documentation, and evidence completeness.</p>
+          </div>
+          <div class="module-card" data-module="assura">
+            <div class="module-icon">AS</div>
+            <h4>ASSURA</h4>
+            <p>Conditional Release-Readiness Assessment. Evaluates whether defined conditions appear satisfied, producing a recommendation for authorised human sign-off.</p>
+          </div>
+          <div class="module-card" data-module="audit">
+            <div class="module-icon">AT</div>
+            <h4>Audit Trail</h4>
+            <p>Append-only, tamper-evident evidence log. Records every verification step, evidence input, condition evaluation, and decision point.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACT -->
+    <section id="contact">
+      <div class="container">
+        <span class="eyebrow reveal">Institutional Access</span>
+        <h2 class="reveal">Request a <span class="grad-text">Private Briefing</span></h2>
+        <p class="reveal reveal-delay-1" style="max-width:680px;">If you represent an institutional stakeholder interested in a controlled briefing, platform demonstration, or strategic partnership discussion, submit your details below.</p>
+
+        <div class="contact-wrap reveal reveal-delay-2">
+          <div class="success-message" id="successMessage">✓ Request received. You will be contacted within 2–3 business days.</div>
+          <form onsubmit="submitForm(event)">
+            <div class="form-field"><input type="text" id="fullName" placeholder="Full name" required></div>
+            <div class="form-field"><input type="email" id="email" placeholder="Work email" required></div>
+            <div class="form-field"><input type="text" id="organisation" placeholder="Organisation / Institution" required></div>
+            <div class="form-field"><input type="text" id="role" placeholder="Your role / title" required></div>
+            <div class="form-field">
+              <select id="interest" required>
+                <option value="">Select area of interest</option>
+                <option value="platform">Platform briefing</option>
+                <option value="demo">Demonstration / Pilot</option>
+                <option value="partnership">Strategic partnership</option>
+                <option value="integration">Technical integration</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+            <div class="form-field"><textarea id="message" placeholder="Tell us what you want to explore with THIQA360" rows="5"></textarea></div>
+            <div class="form-field">
+              <label><input type="checkbox" id="consent" required><span>I consent to being contacted regarding this request and agree to the privacy notice.</span></label>
+            </div>
+            <button type="submit" class="button" style="width:100%; justify-content:center;">Submit Request <span class="arrow">→</span></button>
+            <p style="font-size:12px; margin-top:14px;">Your request will be reviewed and you will be contacted by email within 2–3 business days.</p>
+          </form>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container">
+      <a class="brand" href="#top">
+        <span class="brand-mark"><svg viewBox="0 0 100 100" fill="none"><path d="M25 52 L44 71 L76 32" stroke="#D4AF37" stroke-width="12" stroke-linecap="round" stroke-linejoin="round"/></svg></span>
+        THIQA<span>360</span>
+      </a>
+      <p>Trust Infrastructure for Real-Asset Economies</p>
+      <p class="disclaimer">Pre-MVP prototype. Designed for alignment with ADGM regulatory standards. This does not imply regulatory approval, licensing, or endorsement by any authority. Patent application under active examination; Takamul funding approved. THIQA360 does not hold funds and does not execute financial transactions; all release decisions require authorised human sign-off.</p>
+      <p style="font-size:12px; color:#74879f; margin-top:18px;">© 2026 THIQA360. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <script>
+    // ----- Scroll reveal -----
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('visible'); observer.unobserve(e.target); } });
+    }, { threshold: 0.12 });
+    document.querySelectorAll('.reveal').forEach(el => observer.observe(el));
+
+    // ----- Animated counters -----
+    const counterObserver = new IntersectionObserver((entries) => {
+      entries.forEach(e => {
+        if (!e.isIntersecting) return;
+        const el = e.target;
+        const target = parseInt(el.dataset.count, 10);
+        const suffix = el.dataset.suffix || '';
+        const dur = 1400; const start = performance.now();
+        function tick(now) {
+          const p = Math.min((now - start) / dur, 1);
+          const eased = 1 - Math.pow(1 - p, 3);
+          el.textContent = Math.round(target * eased) + suffix;
+          if (p < 1) requestAnimationFrame(tick);
+        }
+        requestAnimationFrame(tick);
+        counterObserver.unobserve(el);
+      });
+    }, { threshold: 0.5 });
+    document.querySelectorAll('.stat-num').forEach(el => counterObserver.observe(el));
+
+    // ----- Journey -----
+    function showJourneyStep(step) {
+      document.querySelectorAll('.journey-step').forEach(s => s.classList.remove('active'));
+      document.querySelectorAll('.journey-panel').forEach(p => p.classList.remove('active'));
+      document.querySelector('.journey-step[data-step="' + step + '"]').classList.add('active');
+      const panel = document.querySelector('.journey-panel[data-step="' + step + '"]');
+      panel.classList.add('active');
+      const fill = panel.querySelector('.meter-fill');
+      if (fill) { fill.style.width = '0'; requestAnimationFrame(() => setTimeout(() => { fill.style.width = fill.dataset.width; }, 60)); }
+    }
+    showJourneyStep(1);
+
+    // ----- Card glow follows cursor -----
+    document.querySelectorAll('.module-card').forEach(card => {
+      card.addEventListener('mousemove', e => {
+        const r = card.getBoundingClientRect();
+        card.style.setProperty('--mx', (e.clientX - r.left) + 'px');
+        card.style.setProperty('--my', (e.clientY - r.top) + 'px');
+      });
+    });
+
+    // ----- Diagnostic -----
+    function submitDiagnostic(e) {
+      e.preventDefault();
+      let total = 0;
+      for (let i = 1; i <= 5; i++) {
+        const checked = document.querySelector('input[name="q' + i + '"]:checked');
+        total += checked ? parseInt(checked.value, 10) : 0;
+      }
+      const percent = Math.round((total / 10) * 100);
+      let level = 'Fragmented';
+      let description = 'Your governance framework shows significant gaps. THIQA360 can help structure this process. Request a briefing to discuss.';
+      if (percent >= 70) { level = 'Institution-Ready'; description = 'Your governance framework is strong. THIQA360 can add structured confidence assessment and audit-ready evidence paths. Request a briefing to explore institutional integration.'; }
+      else if (percent >= 50) { level = 'Governed'; description = 'Your governance framework is developing well. THIQA360 can help formalise it and add structured confidence assessment. Request a briefing to discuss implementation.'; }
+      else if (percent >= 30) { level = 'Developing'; description = 'Your governance framework is emerging. THIQA360 can help structure and scale your governance. Request a briefing to explore a roadmap.'; }
+      document.getElementById('resultScore').textContent = level;
+      document.getElementById('resultDescription').textContent = description;
+      document.querySelector('.diagnostic-form').style.display = 'none';
+      document.getElementById('diagnosticResult').style.display = 'block';
+      document.getElementById('diagnosticResult').scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+    function resetDiagnostic() {
+      document.querySelector('.diagnostic-form').style.display = 'block';
+      document.getElementById('diagnosticResult').style.display = 'none';
+      document.querySelectorAll('.diagnostic-form input[type="radio"]').forEach(r => r.checked = false);
+    }
+
+    // ----- Module filter -----
+    function filterModules(filter, btn) {
+      document.querySelectorAll('.router-btn').forEach(b => b.classList.remove('active'));
+      btn.classList.add('active');
+      document.querySelectorAll('.module-card').forEach(card => {
+        card.style.display = (filter === 'all' || card.dataset.module === filter) ? 'block' : 'none';
+      });
+    }
+
+    // ----- Contact form -----
+    function submitForm(e) {
+      e.preventDefault();
+      document.getElementById('successMessage').classList.add('show');
+      e.target.reset();
+      window.scrollTo({ top: document.getElementById('successMessage').offsetTop - 120, behavior: 'smooth' });
+      setTimeout(() => document.getElementById('successMessage').classList.remove('show'), 4000);
+    }
+  </script>
+</body>
+</html>
